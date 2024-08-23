@@ -3,72 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Countdown</title>
+    <title>Gravity Falls Countdown</title>
     <style>
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
+            background-color: black;
+            font-family: 'Courier New', Courier, monospace;
+            color: darkred;
             overflow: hidden;
-            background: url('bg.png') no-repeat center center fixed;
-            background-size: cover;
+        }
+
+        .container {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-family: "Courier New", Courier, monospace;
-        }
-        .countdown {
+            height: 100%;
             position: relative;
-            text-align: center;
-            font-size: 48px;
-            color: #333333; /* Dark text color */
         }
-        .timer-frame {
-            background-color: transparent;
+
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .countdown {
+            z-index: 2;
+            font-size: 3em;
+            text-shadow: 2px 2px 5px black;
             border: none;
-            font-size: 64px;
-            color: #333333; /* Dark text color */
+            background: none;
         }
+
         .zoos-image {
             position: absolute;
             top: 50%;
-            left: 50%;
-            transform: translate(-150%, -50%);
-            width: 150px;
+            left: 5%;
+            transform: translate(-50%, -50%);
+            width: 250px;
+            z-index: 3;
+        }
+
+        .timer-container {
+            z-index: 2;
+        }
+
+        .music-iframe {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border: none;
         }
     </style>
 </head>
 <body>
-    <div class="countdown">
+
+    <div class="container">
+        <img src="bg.png" alt="Background" class="background-image">
+        <div class="timer-container">
+            <div id="countdown" class="countdown"></div>
+        </div>
         <img src="soos.png" alt="Zoos" class="zoos-image">
-        <div id="timer" class="timer-frame">00:00:00</div>
     </div>
 
+    <iframe class="music-iframe" 
+            src="https://www.youtube.com/embed/YAVANCPLtaE?autoplay=1&loop=1&playlist=YAVANCPLtaE" 
+            allow="autoplay">
+    </iframe>
+
     <script>
-        function startCountdown(duration, display) {
-            let timer = duration, hours, minutes, seconds;
-            setInterval(function () {
-                hours = parseInt(timer / 3600, 10);
-                minutes = parseInt((timer % 3600) / 60, 10);
-                seconds = parseInt(timer % 60, 10);
+        function countdownTimer() {
+            const eventDate = new Date('2024-08-25T00:00:00').getTime();
+            const now = new Date().getTime();
+            const timeLeft = eventDate - now;
 
-                hours = hours < 10 ? "0" + hours : hours;
-                minutes = minutes < 10 ? "0" + minutes : minutes;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
-                display.textContent = hours + ":" + minutes + ":" + seconds;
+            document.getElementById('countdown').innerHTML = 
+                days + 'd ' + 
+                hours + 'h ' + 
+                minutes + 'm ' + 
+                seconds + 's ';
 
-                if (--timer < 0) {
-                    timer = 0;
-                }
-            }, 1000);
+            if (timeLeft < 0) {
+                document.getElementById('countdown').innerHTML = "It's time!";
+            }
         }
 
-        window.onload = function () {
-            let countdownDuration = 60 * 60 * 24; // 24 hours countdown
-            let display = document.querySelector('#timer');
-            startCountdown(countdownDuration, display);
-        };
+        setInterval(countdownTimer, 1000);
     </script>
 </body>
 </html>
