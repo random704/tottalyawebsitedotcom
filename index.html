@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            background: url('your-background-image-url.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-family: "Courier New", Courier, monospace;
+        }
+        .countdown {
+            position: relative;
+            text-align: center;
+            font-size: 48px;
+            color: #f7f7f7;
+        }
+        .timer-frame {
+            background-color: transparent;
+            border: none;
+            font-size: 64px;
+        }
+        .zoos-image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-150%, -50%);
+            width: 150px;
+        }
+    </style>
+</head>
+<body>
+    <div class="countdown">
+        <img src="zoos-image-url.png" alt="Zoos" class="zoos-image">
+        <div id="timer" class="timer-frame">00:00:00</div>
+    </div>
+
+    <script>
+        function startCountdown(duration, display) {
+            let timer = duration, hours, minutes, seconds;
+            setInterval(function () {
+                hours = parseInt(timer / 3600, 10);
+                minutes = parseInt((timer % 3600) / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                hours = hours < 10 ? "0" + hours : hours;
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = hours + ":" + minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    timer = 0;
+                }
+            }, 1000);
+        }
+
+        window.onload = function () {
+            let countdownDuration = 60 * 60 * 24; // 24 hours countdown
+            let display = document.querySelector('#timer');
+            startCountdown(countdownDuration, display);
+        };
+    </script>
+</body>
+</html>
